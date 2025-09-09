@@ -1,3 +1,4 @@
+// TOP OF THE FILE
 import 'dotenv/config';
 import http from 'http';
 import app from './app.js';
@@ -6,15 +7,20 @@ import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import projectModel from './models/project.model.js';
 import { generateResult } from './services/ai.service.js';
+import cors from 'cors';
 
 const port = process.env.PORT || 3000;
 
+
+app.use(cors({
+    origin: 'https://gemchat-live.netlify.app'
+}));
 
 
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: '*'
+        origin: 'https://gemchat-live.netlify.app'
     }
 });
 
@@ -23,7 +29,7 @@ io.use(async (socket, next) => {
 
     try {
 
-        const token = socket.handshake.auth?.token || socket.handshake.headers.authorization?.split(' ')[ 1 ];
+        const token = socket.handshake.auth?.token || socket.handshake.headers.authorization?.split(' ')[1];
         const projectId = socket.handshake.query.projectId;
 
         if (!mongoose.Types.ObjectId.isValid(projectId)) {
