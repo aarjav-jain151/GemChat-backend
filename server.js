@@ -8,6 +8,7 @@ import mongoose from 'mongoose';
 import projectModel from './models/project.model.js';
 import { generateResult } from './services/ai.service.js';
 import cors from 'cors';
+import userRoutes from './routes/user.routes.js';
 
 const port = process.env.PORT || 3000;
 
@@ -15,6 +16,7 @@ const port = process.env.PORT || 3000;
 app.use(cors({
     origin: 'https://gemchat-live.netlify.app'
 }));
+app.use('/users', userRoutes);
 
 
 const server = http.createServer(app);
