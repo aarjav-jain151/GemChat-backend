@@ -10,12 +10,12 @@ const router = Router();
 router.post('/register', userController.createUserController);
     body('email').isEmail().withMessage('Email must be a valid email address'),
     body('password').isLength({ min: 3 }).withMessage('Password must be at least 3 characters long'),
-    userController.createUserController);
+    userController.createUserController;
 
 router.post('/login', userController.loginController);
     body('email').isEmail().withMessage('Email must be a valid email address'),
     body('password').isLength({ min: 3 }).withMessage('Password must be at least 3 characters long'),
-    userController.loginController);
+    userController.loginController;
 
 router.get('/profile', authMiddleware.authUser, userController.profileController);
 
