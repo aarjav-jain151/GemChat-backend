@@ -1,29 +1,41 @@
-import { Router } from 'express';
-import * as userController from '../controllers/user.controller.js';
-import { body } from 'express-validator';
-import * as authMiddleware from '../middleware/auth.middleware.js';
+import { Router } from "express";
+import * as userController from "../controllers/user.controller.js";
+import { body } from "express-validator";
+import * as authMiddleware from "../middleware/auth.middleware.js";
 
 const router = Router();
 
+// ✅ Register route
+router.post(
+  "/register",
+  [
+    body("email").isEmail().withMessage("Email must be a valid email address"),
+    body("password")
+      .isLength({ min: 3 })
+      .withMessage("Password must be at least 3 characters long"),
+  ],
+  userController.createUserController
+);
 
+// ✅ Login route
+router.post(
+  "/login",
+  [
+    body("email").isEmail().withMessage("Email must be a valid email address"),
+    body("password")
+      .isLength({ min: 3 })
+      .withMessage("Password must be at least 3 characters long"),
+  ],
+  userController.loginController
+);
 
-router.post('/register', userController.createUserController);
-    body('email').isEmail().withMessage('Email must be a valid email address'),
-    body('password').isLength({ min: 3 }).withMessage('Password must be at least 3 characters long'),
-    userController.createUserController;
+// ✅ Profile route
+router.get("/profile", authMiddleware.authUser, userController.profileController);
 
-router.post('/login', userController.loginController);
-    body('email').isEmail().withMessage('Email must be a valid email address'),
-    body('password').isLength({ min: 3 }).withMessage('Password must be at least 3 characters long'),
-    userController.loginController;
+// ✅ Logout route
+router.get("/logout", authMiddleware.authUser, userController.logoutController);
 
-router.get('/profile', authMiddleware.authUser, userController.profileController);
-
-
-router.get('/logout', authMiddleware.authUser, userController.logoutController);
-
-
-router.get('/all', authMiddleware.authUser, userController.getAllUsersController);
-
+// ✅ Get all users route
+router.get("/all", authMiddleware.authUser, userController.getAllUsersController);
 
 export default router;
